@@ -1,0 +1,50 @@
+# GitHub Pages Jekyll 配置文件
+
+title: Blink9209's Tech Blog
+description: 每日技术简报 - 分享编程知识与技术资讯
+author: Blink9209
+email: chenwj9209@163.com
+
+# 时区
+timezone: Asia/Shanghai
+
+# 分页
+paginate: 10
+paginate_path: "/page:num/"
+
+# Markdown 配置
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# 插件
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# 排序
+collections:
+  posts:
+    permalink: /posts/:title/
+    output: true
+
+# 默认配置
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      comments: true
+
+# 社交链接
+social:
+  name: Blink9209
+  links:
+    - https://github.com/Blink9209
+
+# 输出
+future: true
+show_drafts: false

@@ -1,0 +1,33 @@
+{
+  "rss_feeds": [
+    "https://news.ycombinator.com/rss",
+    "https://dev.to/feed",
+    "https://www.reddit.com/r/programming/.rss"
+  ],
+  "ai_topics": [
+    "Python 编程技巧",
+    "JavaScript 最佳实践",
+    "数据结构与算法",
+    "系统设计",
+    "AI/机器学习基础",
+    "云原生技术",
+    "DevOps 实践",
+    "数据库优化",
+    "前端框架原理",
+    "代码整洁之道"
+  ],
+  "content_sources": {
+    "ai": true,
+    "rss": true,
+    "notes": true
+  },
+  "github": {
+    "username": "Blink9209",
+    "email": "chenwj9209@163.com",
+    "repo": "blink9209.github.io"
+  },
+  "publish": {
+    "time": "00:00",
+    "timezone": "Asia/Shanghai"
+  }
+}

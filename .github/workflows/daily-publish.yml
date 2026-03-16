@@ -1,0 +1,83 @@
+# GitHub Actions 工作流配置
+# 自动每天生成并发布技术博客
+
+name: Daily Tech Blog Auto-Publish
+
+on:
+  # 每天凌晨 UTC 0 点运行（北京时间 8 点）
+  schedule:
+    - cron: '0 0 * * *'
+  # 允许手动触发
+  workflow_dispatch:
+  # 当有提交时也可以触发（可选）
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - '_posts/**'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# 设置并发组
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+      # 1. 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      # 2. 设置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests feedparser openai python-dateutil
+      
+      # 4. 生成博客内容
+      - name: Generate blog post
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          cd scripts
+          python generate_post.py
+      
+      # 5. 配置 Git
+      - name: Configure Git
+        run: |
+          git config --global user.name 'Blink9209'
+          git config --global user.email 'chenwj9209@163.com'
+      
+      # 6. 提交更改
+      - name: Commit and push
+        run: |
+          git add _posts/
+          git status
+          git commit -m "Auto-publish: $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push || echo "Push skipped (no changes)"
+      
+      # 7. 部署到 GitHub Pages（如果启用）
+      - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/deploy-pages@v4

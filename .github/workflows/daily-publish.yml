@@ -64,8 +64,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          cd scripts
-          python generate_post.py
+          python scripts/generate_post.py
       
       # 5. 配置 Git
       - name: Configure Git

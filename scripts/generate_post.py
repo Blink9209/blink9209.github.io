@@ -14,6 +14,10 @@ import datetime
 import subprocess
 from pathlib import Path
 
+# 获取项目根目录
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent
+
 # 配置
 CONFIG = {
     "rss_feeds": [
@@ -158,11 +162,15 @@ def save_post(content):
     """保存博客文章"""
     date = get_date()
     filename = f"_posts/{date}-daily-tech.md"
+    filepath = PROJECT_ROOT / filename
     
-    with open(filename, 'w', encoding='utf-8') as f:
+    # 确保目录存在
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
     
-    print(f"✅ 博客文章已生成: {filename}")
+    print(f"✅ 博客文章已生成: {filepath}")
     return filename
 
 def git_commit_push(filename):

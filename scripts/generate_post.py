@@ -175,14 +175,17 @@ def git_commit_push(filename):
         # 添加文件
         subprocess.run(['git', 'add', filename], check=True)
         
+        # 检查是否有更改
+        result = subprocess.run(['git', 'status', '--porcelain'], capture_output=True, text=True)
+        if not result.stdout.strip():
+            print("📝 没有新内容需要提交")
+            return True
+        
         # 提交
         commit_message = f"Auto-publish daily post: {get_date()}"
         subprocess.run(['git', 'commit', '-m', commit_message], check=True)
         
-        # 推送
-        subprocess.run(['git', 'push'], check=True)
-        
-        print("✅ 文章已推送到 GitHub!")
+        print("✅ 文章已提交到本地!")
         return True
     except subprocess.CalledProcessError as e:
         print(f"❌ Git 操作失败: {e}")
